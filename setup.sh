@@ -4,8 +4,8 @@
 #   SRC_DIR=$HOME/profile/default/src/unstable
 #   INSTALL_DIR=$HOME/profile/default/install/unstable
 
-SRC_DIR=/home/thomas/profiles/laas/src/unstable
-INSTALL_DIR=/home/thomas/profiles/laas/install/unstable
+SRC_DIR=
+INSTALL_DIR=
 
 # Use environment variables to override these options
 : ${GIT=/usr/bin/git}
