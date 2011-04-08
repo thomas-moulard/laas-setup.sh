@@ -1,3 +1,4 @@
+
 #! /bin/sh
 # Please set these values before running the script!
 # We recommend something like:
@@ -79,9 +80,15 @@ install_doxygen()
 
 install_pkg()
 {
+
     cd $1
-    ${GIT} ${GIT_CLONE_OPTS} clone $3/$2
-    cd $2
+    if [ -d $2 ]; then        
+	cd $2    
+    	${GIT} pull
+    else
+    	${GIT} ${GIT_CLONE_OPTS} clone $3/$2
+        cd $2
+    fi
     if ! test x"$4" = x; then
 	${GIT} checkout -b $4 origin/$4
     fi
