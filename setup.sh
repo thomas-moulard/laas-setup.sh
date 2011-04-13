@@ -1,4 +1,3 @@
-
 #! /bin/sh
 # Please set these values before running the script!
 # We recommend something like:
@@ -14,17 +13,22 @@ INSTALL_DIR=
 : ${MAKE=/usr/bin/make}
 
 : ${GIT_CLONE_OPTS=}
+: ${MAKE_OPTS=-j3 -k}
 
 : ${BUILD_TYPE=Release}
-
+: ${ROBOT=HRP2LAAS}
 
 # Git URLs
 JRL_URI=git@github.com:jrl-umi3218
 LAAS_URI=git@github.com:laas
 
+# If you do not have a GitHub account (read-only):
+#JRL_URI=git://github.com:jrl-umi3218
+#LAAS_URI=git://github.com:laas
+
+# HTTP protocol can also be used:
 #JRL_URI=https://thomas-moulard@github.com/jrl-umi3218
 #LAAS_URI=https://thomas-moulard@github.com/laas
-
 
 LAAS_PRIVATE_URI=ssh://softs.laas.fr/git/jrl
 
@@ -60,8 +64,8 @@ install_git()
     tar xjvf git-1.7.4.1.tar.bz2
     cd git-1.7.4.1
     ./configure --prefix=${INSTALL_DIR}
-    make
-    make install
+    ${MAKE} ${MAKE_OPTS}
+    ${MAKE} ${MAKE_OPTS} install
 }
 
 install_doxygen()
@@ -74,42 +78,55 @@ install_doxygen()
     tar xzvf doxygen-1.7.3.src.tar.gz
     cd doxygen-1.7.3
     ./configure --prefix ${INSTALL_DIR}
-    make
-    make install
+    ${MAKE} ${MAKE_OPTS}
+    ${MAKE} ${MAKE_OPTS} install
 }
 
 install_pkg()
 {
 
     cd $1
-    if [ -d $2 ]; then        
-	cd $2    
+    if test -d "$2"; then
+	cd $2
     	${GIT} pull
     else
     	${GIT} ${GIT_CLONE_OPTS} clone $3/$2
         cd $2
     fi
     if ! test x"$4" = x; then
-	${GIT} checkout -b $4 origin/$4
+       if ${GIT} branch | grep $4 ; then
+	   ${GIT} checkout $4
+       else
+	   ${GIT} checkout -b $4 origin/$4
+       fi
     fi
     ${GIT} submodule init && ${GIT} submodule update
-    mkdir _build
+    mkdir -p _build
     cd _build
     ${CMAKE} \
 	-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
 	-DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
-	-DSMALLMATRIX=jrl-mathtools -DROBOT=HRP2LAAS ..
-    make -j3
-    make install -j3
+	-DSMALLMATRIX=jrl-mathtools -DROBOT=${ROBOT} ..
+    ${MAKE} ${MAKE_OPTS}
+    ${MAKE} install ${MAKE_OPTS}
 }
 
 install_python_pkg()
 {
-    cd $1
-    ${GIT} ${GIT_CLONE_OPTS} clone $3/$2
-    cd $2
+    cd "$1"
+    if test -d "$2"; then
+	cd "$2"
+	${GIT} pull
+    else
+	${GIT} ${GIT_CLONE_OPTS} clone "$3/$2"
+	cd "$2"
+    fi
     if ! test x"$4" = x; then
-	${GIT} checkout -b $4 origin/$4
+       if ${GIT} branch | grep "$4" ; then
+	   ${GIT} checkout "$4"
+       else
+	   ${GIT} checkout -b "$4" "origin/$4"
+       fi
     fi
     ${GIT} submodule init && ${GIT} submodule update
     python setup.py install --prefix=${INSTALL_DIR}
