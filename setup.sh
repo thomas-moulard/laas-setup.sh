@@ -101,8 +101,8 @@ install_pkg()
        fi
     fi
     ${GIT} submodule init && ${GIT} submodule update
-    mkdir -p _build
-    cd _build
+    mkdir -p _build-${BUILD_TYPE}
+    cd _build-${BUILD_TYPE}
     ${CMAKE} \
 	-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
 	-DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
