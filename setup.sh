@@ -4,8 +4,11 @@
 #   SRC_DIR=$HOME/profile/default/src/unstable
 #   INSTALL_DIR=$HOME/profile/default/install/unstable
 
-SRC_DIR=
-INSTALL_DIR=
+set -e
+
+SRC_DIR=/home/thomas/profiles/laas/src/unstable
+INSTALL_DIR=/home/thomas/profiles/laas/install/unstable
+
 
 # Use environment variables to override these options
 : ${GIT=/usr/bin/git}
@@ -17,6 +20,9 @@ INSTALL_DIR=
 
 : ${BUILD_TYPE=Release}
 : ${ROBOT=HRP2LAAS}
+
+# Compilation flags
+: ${CFLAGS="-march=pentium-m -O3 -pipe -fomit-frame-pointer -ggdb -DNDEBUG"}
 
 # Git URLs
 JRL_URI=git@github.com:jrl-umi3218
@@ -105,6 +111,8 @@ install_pkg()
     cd _build-${BUILD_TYPE}
     ${CMAKE} \
 	-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+	-DCMAKE_C_FLAGS_${BUILD_TYPE}=${CFLAGS} \
+	-DCMAKE_CXX_FLAGS_${BUILD_TYPE}=${CFLAGS} \
 	-DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
 	-DSMALLMATRIX=jrl-mathtools -DROBOT=${ROBOT} ..
     ${MAKE} ${MAKE_OPTS}
@@ -140,25 +148,25 @@ export PYTHONPATH="${INSTALL_DIR}/lib/python2.6/dist-packages"
 export PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/sbin:$PATH"
 
 # --- Third party tools
-#install_git
-#install_doxygen
+install_git
+install_doxygen
 
 # --- Roboptim
-#install_pkg $SRC_DIR/roboptim roboptim-core ${LAAS_URI}
+install_pkg $SRC_DIR/roboptim roboptim-core ${LAAS_URI}
 
-#install_pkg $SRC_DIR/roboptim cfsqp \
-#    ${LAAS_PRIVATE_URI}/roboptim/core-plugin
-#install_pkg $SRC_DIR/roboptim roboptim-trajectory ${LAAS_URI}
+install_pkg $SRC_DIR/roboptim cfsqp \
+    ${LAAS_PRIVATE_URI}/roboptim/core-plugin
+install_pkg $SRC_DIR/roboptim roboptim-trajectory ${LAAS_URI}
 
 # --- Mathematical tools
-#install_pkg $SRC_DIR/jrl jrl-mathtools ${JRL_URI}
-#install_pkg $SRC_DIR/jrl jrl-mal ${JRL_URI} topic/python
+install_pkg $SRC_DIR/jrl jrl-mathtools ${JRL_URI}
+install_pkg $SRC_DIR/jrl jrl-mal ${JRL_URI} topic/python
 
 # --- Interfaces
-#install_pkg $SRC_DIR/laas abstract-robot-dynamics ${LAAS_URI}
+install_pkg $SRC_DIR/laas abstract-robot-dynamics ${LAAS_URI}
 
 # --- Dynamics implementation
-#install_pkg $SRC_DIR/jrl jrl-dynamics ${JRL_URI}
+install_pkg $SRC_DIR/jrl jrl-dynamics ${JRL_URI}
 
 
 # --- Robots private data
@@ -168,25 +176,25 @@ export PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/sbin:$PATH"
 # - hrp2Dynamics
 # - hrp2-10-optimized
 #
-#install_pkg $SRC_DIR/robots hrp2_10 ${LAAS_PRIVATE_URI}
-#install_pkg $SRC_DIR/robots hrp2_14 ${LAAS_PRIVATE_URI}
-#install_pkg $SRC_DIR/robots hrp2Dynamics ${LAAS_PRIVATE_URI}
-#install_pkg $SRC_DIR/robots hrp2-10-optimized ${LAAS_PRIVATE_URI}/robots
+install_pkg $SRC_DIR/robots hrp2_10 ${LAAS_PRIVATE_URI}
+install_pkg $SRC_DIR/robots hrp2_14 ${LAAS_PRIVATE_URI}
+install_pkg $SRC_DIR/robots hrp2Dynamics ${LAAS_PRIVATE_URI}
+install_pkg $SRC_DIR/robots hrp2-10-optimized ${LAAS_PRIVATE_URI}/robots
 
 
 # --- Dynamic graph and associated bindings.
-#install_pkg $SRC_DIR/sot dynamic-graph ${JRL_URI} topic/proto-command
-#install_pkg $SRC_DIR/sot dynamic-graph-python ${JRL_URI} topic/jrl-mal
+install_pkg $SRC_DIR/sot dynamic-graph ${JRL_URI} topic/proto-command
+install_pkg $SRC_DIR/sot dynamic-graph-python ${JRL_URI} topic/jrl-mal
 
-#install_pkg $SRC_DIR/laas hpp-template-corba ${LAAS_URI}
-#install_pkg $SRC_DIR/laas dynamic-graph-corba ${LAAS_URI}
+install_pkg $SRC_DIR/laas hpp-template-corba ${LAAS_URI}
+install_pkg $SRC_DIR/laas dynamic-graph-corba ${LAAS_URI}
 
 # Optional CORBA bindings:
 #  install_pkg $SRC_DIR/sot dg-middleware ${JRL_URI}
 
 # --- Control architecture
-#install_pkg $SRC_DIR/sot sot-core ${JRL_URI} topic/python
-#install_pkg $SRC_DIR/sot sot-dynamic ${JRL_URI} topic/python
+install_pkg $SRC_DIR/sot sot-core ${JRL_URI} topic/python
+install_pkg $SRC_DIR/sot sot-dynamic ${JRL_URI} topic/python
 
 # Additionally, you can also compile:
 #
@@ -195,7 +203,7 @@ export PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/sbin:$PATH"
 #  install_pkg $SRC_DIR/sot sot-pattern-generator ${JRL_URI}
 #
 # OpenHRP support:
-#install_pkg $SRC_DIR/sot sot-openhrp ${JRL_URI} topic/python
+install_pkg $SRC_DIR/sot sot-openhrp ${JRL_URI} topic/python
 #  install_pkg $SRC_DIR/sot sot-openhrp-scripts ${JRL_URI}
 #
 # Visualization tools:
@@ -203,4 +211,4 @@ export PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/sbin:$PATH"
 #  install_python_pkg $SRC_DIR/laas sot-gui ${LAAS_URI}
 
 
-#install_pkg $SRC_DIR/sot sot-motion-planner "git@github.com:thomas-moulard"
+install_pkg $SRC_DIR/sot sot-motion-planner "git@github.com:thomas-moulard"
