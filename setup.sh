@@ -183,17 +183,19 @@ install_pkg $SRC_DIR/robots hrp2-10-optimized ${LAAS_PRIVATE_URI}/robots
 
 
 # --- Dynamic graph and associated bindings.
-install_pkg $SRC_DIR/sot dynamic-graph ${JRL_URI} topic/proto-command
-install_pkg $SRC_DIR/sot dynamic-graph-python ${JRL_URI} topic/jrl-mal
+install_pkg $SRC_DIR/sot dynamic-graph ${JRL_URI} topic/singleton
+install_pkg $SRC_DIR/sot dynamic-graph-python ${JRL_URI} topic/singleton
 
 install_pkg $SRC_DIR/laas hpp-template-corba ${LAAS_URI}
+
+install_pkg $SRC_DIR/sot sot-core ${JRL_URI} topic/python
 install_pkg $SRC_DIR/laas dynamic-graph-corba ${LAAS_URI}
 
 # Optional CORBA bindings:
 #  install_pkg $SRC_DIR/sot dg-middleware ${JRL_URI}
 
 # --- Control architecture
-install_pkg $SRC_DIR/sot sot-core ${JRL_URI} topic/python
+
 install_pkg $SRC_DIR/sot sot-dynamic ${JRL_URI} topic/python
 
 # Additionally, you can also compile:
