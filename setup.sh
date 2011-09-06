@@ -63,12 +63,12 @@ mkdir -p                \
 install_git()
 {
     cd /tmp
-    rm -f git-1.7.4.1.tar.bz2
-    wget http://kernel.org/pub/software/scm/git/git-1.7.4.1.tar.bz2
-    mv git-1.7.4.1.tar.bz2 $SRC_DIR/oss/
+    rm -f git-1.7.6.1.tar.bz2
+    wget http://kernel.org/pub/software/scm/git/git-1.7.6.1.tar.bz2
+    mv git-1.7.6.1.tar.bz2 $SRC_DIR/oss/
     cd $SRC_DIR/oss
-    tar xjvf git-1.7.4.1.tar.bz2
-    cd git-1.7.4.1
+    tar xjvf git-1.7.6.1.tar.bz2
+    cd git-1.7.6.1
     ./configure --prefix=${INSTALL_DIR}
     ${MAKE} ${MAKE_OPTS}
     ${MAKE} ${MAKE_OPTS} install
