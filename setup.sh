@@ -6,9 +6,10 @@
 
 set -e
 
-SRC_DIR=/home/thomas/profiles/laas/src/unstable
-INSTALL_DIR=/home/thomas/profiles/laas/install/unstable
+PROFILE=$HOME/profiles/default-i386-linux-ubuntu-10.04
 
+SRC_DIR=$PROFILE/src/unstable
+INSTALL_DIR=$PROFILE/install/unstable
 
 # Use environment variables to override these options
 : ${GIT=/usr/bin/git}
@@ -16,13 +17,13 @@ INSTALL_DIR=/home/thomas/profiles/laas/install/unstable
 : ${MAKE=/usr/bin/make}
 
 : ${GIT_CLONE_OPTS=}
-: ${MAKE_OPTS=-j3 -k}
+: ${MAKE_OPTS=-j9 -k}
 
 : ${BUILD_TYPE=Release}
 : ${ROBOT=HRP2LAAS}
 
 # Compilation flags
-: ${CFLAGS="-march=pentium-m -O3 -pipe -fomit-frame-pointer -ggdb -DNDEBUG"}
+: ${CFLAGS="-march=native -O3 -pipe -fomit-frame-pointer -ggdb -DNDEBUG"}
 
 # Git URLs
 JRL_URI=git@github.com:jrl-umi3218
